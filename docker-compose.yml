@@ -1,0 +1,18 @@
+services:
+  db:
+    image: postgres:16-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    ports:
+      - 5432:5432
+    expose:
+      - 5432
+    environment:
+      - POSTGRES_USER=fastapi_project_user
+      - POSTGRES_PASSWORD=new_password
+      - POSTGRES_DB=fastapi_project_db
+
+#To persist the data beyond the life of the container we configured a volume.
+#This config will bind postgres_data to the /var/lib/postgresql/data/ directory in the container.
+volumes:
+  postgres_data:
