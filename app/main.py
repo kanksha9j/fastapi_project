@@ -1,0 +1,27 @@
+from typing import Union
+
+from fastapi import FastAPI
+
+app = FastAPI()
+
+# An API endpoint is the specific URL (including parameters) that a client can call to interact with your backend.
+# eg: http://localhost:8000/items/42
+# This defines a route. The route is the combination of path + http method(GET, POST, PUT) + handler function.
+@app.get("/")
+def read_root():
+    return {"Hello": "World"}
+#Path = /
+#Method = GET
+#Handler = read_root() function
+#This route means: "When someone sends a GET request to /, run read_root()."
+
+# Dynamic routes. You can capture path parameters. 
+@app.get("/items/{item_id}")
+def read_item(item_id: int, q: Union[str, None] = None):
+    return {"item_id": item_id, "q": q}
+
+# /items/42 → item_id = 42. Route has a variable in the path.
+
+@app.get("/status")
+async def status():
+    return {"message": "OK"}
