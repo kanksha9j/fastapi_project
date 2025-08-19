@@ -1,4 +1,5 @@
-# fastapi_project
+# fastapi_project 
+This project is created to locate nearby charging stations and enter the data into a PostgreSQL database initially and later into PostGIS. The project is aimed at learning the basics of Python and related tech stack, including FastAPI, PostgreSQL, Docker and pytest.
 
 Steps to Setup
 
