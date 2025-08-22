@@ -49,3 +49,41 @@ def create_charging_station(station: ChargingStationCreate):
         return ChargingStation(**new_station)
 
     raise HTTPException(status_code=400, detail="Charging station creation failed")
+
+@app.get("/charging_stations/", response_model=list[ChargingStation])
+def read_charging_stations():
+    chargingstations = []
+    conn, cursor = get_db_connection()
+    try:
+        cursor.execute("SELECT * FROM charging_station;")
+        stations = cursor.fetchall()
+        for station in stations:
+            chargingstations.append(ChargingStation(**station))
+        cursor.close()
+    except Exception as e:
+        conn.close()
+        raise HTTPException(status_code=500, detail=str(e))
+  
+    conn.close()
+    if chargingstations:
+        return chargingstations
+    raise HTTPException(status_code=400, detail="No charging stations found")
+
+@app.delete("/charging_stations/{station_id}")
+def delete_charging_station(station_id: int):
+    conn, cursor = get_db_connection()
+    try:
+        cursor.execute("DELETE FROM charging_station WHERE station_id = %s", (station_id,))
+        deleted_rows = cursor.rowcount
+        conn.commit()
+        cursor.close()
+    except Exception as e:
+        conn.close()
+        raise HTTPException(status_code=500, detail=str(e))
+
+    conn.close()
+    if deleted_rows > 0:
+        return {"message": "Charging station deleted successfully"}
+    raise HTTPException(status_code=400, detail="Charging station not found")
+
+

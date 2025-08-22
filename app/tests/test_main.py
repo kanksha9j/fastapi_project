@@ -54,3 +54,43 @@ def test_when_charging_station_is_created_in_database(client: TestClient):
     assert data["latitude"] == station_data["latitude"]
     assert data["longitude"] == station_data["longitude"]
     assert data["address"] == station_data["address"]
+
+def test_get_charging_stations(client: TestClient):
+    # Test the retrieval of all charging stations
+    response = client.get("/charging_stations/")
+    assert response.status_code == 200
+    data = response.json()
+    assert isinstance(data, list)
+    assert len(data) > 0  # Assuming there are charging stations in the database
+    for station in data:
+        assert "station_id" in station
+        assert "name" in station
+        assert "latitude" in station
+        assert "longitude" in station
+        assert "address" in station
+
+#def test_when_charging_station_is_deleted(client: TestClient):
+
+    # Create new charging station
+    station_data = {
+        "station_id": randint(1000, 9999),
+        "name": f"station_{randint(1000, 9999)}",
+        "latitude": randint(-90, 90),
+        "longitude": randint(-180, 180),
+        "address": f"{randint(80000, 80999)} Munich"
+    }
+
+    response = client.post("/charging_stations/", json=station_data)
+    assert response.status_code == 200
+    data = response.json()
+    station_id = data["station_id"]
+
+    # Test the deletion of a charging station
+    response = client.delete(f"/charging_stations/{station_id}")
+    assert response.status_code == 200
+
+    # Verify the station is deleted
+    response = client.get(f"/charging_stations/")
+    assert response.status_code == 200
+    data = response.json()
+    assert all(station["station_id"] != station_id for station in data)

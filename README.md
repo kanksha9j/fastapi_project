@@ -29,7 +29,7 @@ Steps to Setup
 5. Setup PostgreSQL in Docker
 - Install Docker Desktop (and WSL on Windows if needed: wsl --install)
 - Create docker-compose.yml with PostgreSQL image, ports, environment variables
-- Start database: docker compose up -d
+- Start database: docker compose up
 - Connected PostgreSQL database inside VSCode using PostgreSQL extension
 
 6. Created routes and test files
@@ -39,3 +39,23 @@ Steps to Setup
 7. Installed PostgreSQL database driver
 - pip install psycopg2-binary
 - Created db.py for database connection
+
+8. Install pydantic settings, allows type-safe usage of environment variables.
+- pip install pydantic-settings
+- Create config.py, use Pydantic to define type-safe configuration. This file will be imported in db.py for database settings.
+- Create chargingstation.py, use Pydantic to define a type-safe class for charging station attributes. Import and use this class in main.py to ensure type safety when handling charging station data.
+
+9. Create requirements.txt, captures all installed packages for reproducibility.
+- pip freeze > requirements.txt
+- Create pytest.ini , Configure pytest, including environment variable support. Install support for environment variables in pytest: pip install pytest-env
+
+10. Create PostgreSQL table using postgreSQL explorer in VSCode.
+
+11. run pytest with: pytest -c app/tests/pytest.ini
+
+12. Swagger and Docker setup:
+- Swagger automatically generates a UI with documentation for your FastAPI application.
+- In Dockerfile: Start with a base image. Copy your application files. Expose the FastAPI port.
+- In docker-compose.yml: Add your backend service. Add a PostgreSQL service. Ensure both services can communicate. 
+- Run your application; Swagger UI will be available for interactive API documentation.
+
