@@ -1,7 +1,7 @@
 # fastapi_project 
 This project is created to locate nearby charging stations and enter the data into a PostgreSQL database initially and later into PostGIS. The project is aimed at learning the basics of Python and related tech stack, including FastAPI, PostgreSQL, Docker and pytest.
 
-Steps to Setup
+## Steps to Setup
 
 1. Created Python virtual environment with Python 3.10 in VSCode
 - pip install virtualenv (if not already installed)
@@ -59,3 +59,17 @@ Steps to Setup
 - In docker-compose.yml: Add your backend service. Add a PostgreSQL service. Ensure both services can communicate. 
 - Run your application; Swagger UI will be available for interactive API documentation.
 
+## PostGIS setup
+
+1. remove postgreSQL container and volume
+- change docker-compose.yml:
+- image: postgis/postgis:16-3.5-alpine
+
+2. Start and check postgis :
+- docker compose up
+- docker ps
+- docker exec -it evchargingstation-db-1 sh
+- psql -U fastapi_project_user -d fastapi_project_db
+- CREATE EXTENSION IF NOT EXISTS postgis;
+- CREATE EXTENSION IF NOT EXISTS postgis_topology;
+- SELECT PostGIS_Full_Version(); //verify postgis installation
